@@ -6,19 +6,19 @@ The project is built using Python with CustomTkinter for the user interface and 
 
 
 # Previews
-![image](https://github.com/MN-Creator/UtilityGear/assets/68109830/ddd639f3-1dc0-4478-988f-86af548ab4a0)
+![Screenshot 2023-11-13 211458](https://github.com/MN-Creator/UtilityGear/assets/68109830/c27dd293-8fd6-43f7-aa3a-1866a39b4488)
 
 Text Tab: Different text tools like sorting a list, only uppercase or removing extra whitespace.
 
-![image](https://github.com/MN-Creator/UtilityGear/assets/68109830/a6a3e1a3-75e1-4d37-a937-45991780ae3c)
+![Screenshot 2023-11-13 193605](https://github.com/MN-Creator/UtilityGear/assets/68109830/a6280a73-502a-468a-9696-16bfe32b1c83)
 
 Notepad Tab: For when you need to remember text or numbers when jumping between programs.
 
-![image](https://github.com/MN-Creator/UtilityGear/assets/68109830/d951a697-8fa6-4344-89b1-1deac550bbdd)
+![Screenshot 2023-11-13 190646](https://github.com/MN-Creator/UtilityGear/assets/68109830/d5471b2d-d4ae-4ef4-bb45-7881c1a066ce)
 
 Converter Tab: Convert between units by simply typing in the number and unit. The program will automatically decide what unit to convert to.
 
-![image](https://github.com/MN-Creator/UtilityGear/assets/68109830/39d73ce2-7cdb-417f-94f0-d93772b33432)
+![Screenshot 2023-11-13 193948](https://github.com/MN-Creator/UtilityGear/assets/68109830/cba6725c-9a0b-44b6-92da-8c6f14836b57)
 
 Settings Tab: Decide the programs style and how it should behave. You can also disable tabs you don't use.
 
