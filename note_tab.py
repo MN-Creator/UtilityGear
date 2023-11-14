@@ -14,5 +14,5 @@ class NoteTab(Tab):
         font_size_setting.on_change = self._set_font_size
         
     def _set_font_size(self):
-        font_size = self.app.settings.get_int("font_size")
+        font_size = self.app.settings.get_int("notepad_font_size")
         self.text.configure(font=("TkDefaultFont", font_size))
