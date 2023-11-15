@@ -17,9 +17,8 @@ class App(ctk.CTk):
         self.create_widgets()
 
     def setup_bindings(self):
-        self.bind("<Alt-KeyPress-q>", lambda event: self.withdraw())
         self.bind("<Alt-KeyPress-z>", lambda event: self.destroy())
-        keyboard.add_hotkey("alt+q", self.open_window())
+        keyboard.add_hotkey("alt+q", self.toggle_window)
 
     def setup_window(self):
         self.wm_attributes("-topmost", self.settings.get("always_on_top").value)
@@ -47,8 +46,10 @@ class App(ctk.CTk):
         self.window_height = self.settings.get_int("window_height")
         self.set_window_size(self.window_width, self.window_height)
 
-    def open_window(self):
-        if self.state() == "withdrawn" or self.state() == "iconic":
+    def toggle_window(self):
+        if self.state() == "normal":
+            self.withdraw()
+        elif self.state() == "withdrawn" or self.state() == "iconic":
             self.deiconify()
 
     def set_window_size(self, width, height):
