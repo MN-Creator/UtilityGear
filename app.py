@@ -29,7 +29,6 @@ class App(ctk.CTk):
 
     def create_settings(self):
         self.settings = SettingsManager()
-        self.settings.clear_settings()
         window_width_setting = self.settings.create("window_width", 400, hidden=True, 
                                                             min_value=300, max_value=700)
         window_height_setting = self.settings.create("window_height", 400, hidden=True,
