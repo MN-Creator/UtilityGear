@@ -11,7 +11,7 @@ class NoteTab(Tab):
 
     def _create_settings(self):
         options = [12, 14, 16, 18, 20]
-        self.font_size_setting = self.app.settings.create("notepad_font_size", options[0], options=options)
+        self.font_size_setting = self.app.settings.create_option("notepad_font_size", options[0], options=options)
         self.font_size_setting.on_change = self._set_font_size
         
     def _set_font_size(self):

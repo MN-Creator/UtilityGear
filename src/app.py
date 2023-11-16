@@ -28,10 +28,8 @@ class App(ctk.CTk):
 
     def create_settings(self):
         self.settings = SettingsManager()
-        window_width_setting = self.settings.create("window_width", 400, hidden=True, 
-                                                            min_value=300, max_value=700)
-        window_height_setting = self.settings.create("window_height", 400, hidden=True,
-                                                             min_value=300, max_value=700)
+        window_width_setting = self.settings.create_range("window_width", 400, 300, 700, hidden=True)
+        window_height_setting = self.settings.create_range("window_height", 400, 300, 700, hidden=True)
         window_width_setting.on_change = self.rescale_window
         window_height_setting.on_change = self.rescale_window
         aot_setting = self.settings.create("always_on_top", default_value=True)

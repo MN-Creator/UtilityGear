@@ -5,18 +5,16 @@ class SettingsManager:
     def __init__(self):
         self.settings_file = "app_settings.json"
         self.settings = dict()
-        self.create_settings_file()
-        self.load_settings()
-        self.on_change_commands = dict()
-        self.clamp_commands = dict()
+        self._create_settings_file()
+        self._load_settings()
     
-    def create_settings_file(self):
+    def _create_settings_file(self):
         # Create a settings file if it doesn't exist.
         if(not os.path.exists(self.settings_file)):
             with open(self.settings_file, "w") as file:
                 file.write("")
     
-    def load_settings(self):
+    def _load_settings(self):
         if(os.stat(self.settings_file).st_size == 0):
             return
         with open(self.settings_file, "r") as file:
@@ -24,7 +22,7 @@ class SettingsManager:
         for key, value in output.items():
             self.settings[key] = Setting.from_dict(value)
     
-    def save_settings(self):
+    def _save_settings(self):
         save_json = dict()
         for key, value in self.settings.items():
             save_json[key] = value.to_dict()
@@ -32,48 +30,75 @@ class SettingsManager:
             json.dump(save_json, file, indent=4)
     
     def clear_settings(self):
+        """Remove all settings"""
         self.settings = {}
-        self.save_settings()
+        self._save_settings()
 
-    def create(self, setting, default_value, hidden=False, options=None, min_value=None, max_value=None):
+    def create(self, name, default_value, hidden=False):
+        """Create a setting with a default value."""
         try:
-            self.settings[setting].default_value = default_value
-            self.settings[setting].hidden = hidden
-            if options is not None:
-                options = Setting.to_str_list(options)
-            self.settings[setting].min_value = min_value
-            self.settings[setting].max_value = max_value
+            self.settings[name].default_value = default_value
+            self.settings[name].hidden = hidden
         except KeyError:
-            if options is not None:
-                options = Setting.to_str_list(options)
-            self.settings[setting] = Setting(setting, default_value, default_value, hidden, options=options, min_value=min_value, max_value=max_value)
-            self.save_settings()
-        return self.settings[setting]
+            self.settings[name] = Setting(name, default_value, default_value, hidden)
+            self._save_settings()
+        return self.settings[name]
 
-    def get(self, setting, default_value="0"):
+    def create_range(self, name, default_value, min_value, max_value, hidden=False):
+        """Create a setting that can have a value between min_value and max_value."""
         try:
-            return self.settings[setting]
+            self.settings[name].default_value = default_value
+            self.settings[name].hidden = hidden
+            self.settings[name].min_value = min_value
+            self.settings[name].max_value = max_value
         except KeyError:
-            self.settings[setting] = Setting(setting, default_value, default_value)
-            self.save_settings()
-            return setting
+            self.settings[name] = Setting(name, default_value, default_value, 
+                                          hidden, min_value=min_value, max_value=max_value)
+            self._save_settings()
+        return self.settings[name]
 
-    def get_float(self, setting):
-        return float(self.get(setting).value)
-
-    def get_int(self, setting):
-        return int(self.get(setting).value)
-
-    def set(self, setting, value):
+    def create_option(self, name, default_value, options, hidden=False):
+        """Create a setting that can have a value from a list of options."""
         try:
-            self.settings[setting].set_value(value)
-            self.save_settings()
+            self.settings[name].default_value = default_value
+            self.settings[name].hidden = hidden
+            self.settings[name].options = Setting.to_str_list(options)
         except KeyError:
-            self.settings[setting] = Setting(setting, value)
-            self.save_settings()
+            options_str_list = Setting.to_str_list(options)
+            self.settings[name] = Setting(name, default_value, default_value, 
+                                          hidden, options=options_str_list)
+            self._save_settings()
+        return self.settings[name]
+
+    def get(self, name, default_value=None):
+        """Get a setting by name, returns a new setting if not found."""
+        try:
+            return self.settings[name]
+        except KeyError:
+            self.settings[name] = Setting(name, default_value, default_value)
+            self._save_settings()
+            return name
+
+    def get_float(self, name):
+        """Returns the value of a setting as a float."""
+        return float(self.get(name).value)
+
+    def get_int(self, name):
+        """Returns the value of a setting as an int."""
+        return int(self.get(name).value)
+
+    def set(self, name, value):
+        """Set the value of a setting by name, creates a new setting if not found."""
+        try:
+            self.settings[name].set_value(value)
+            self._save_settings()
+        except KeyError:
+            self.settings[name] = Setting(name, value)
+            self._save_settings()
 
 class Setting:
-    def __init__(self, name, value, default_value="0", hidden=False, on_change=None, options=None, min_value=None, max_value=None):
+    def __init__(self, name, value, default_value=None, hidden=False,
+                 on_change=None, options=None, min_value=None, max_value=None):
         self.name = name
         self.value = value
         self.value_type = type(value)
@@ -86,6 +111,7 @@ class Setting:
     
     @staticmethod
     def from_dict(dict):
+        """"Create a setting from a dictionary."""
         setting = Setting(dict["name"], dict["value"])
         if "default_value" in dict:
             setting.default_value = dict["default_value"]
@@ -116,14 +142,15 @@ class Setting:
         self.value = self.default_value
     
     def set_value(self, value):
-        value = self.clamp(value)
+        value = self._clamp(value)
         if self.value_type is not None:
             value = self.value_type(value)
         self.value = value
         if self.on_change is not None:
             self.on_change()
     
-    def clamp(self, value):
+    def _clamp(self, value):
+        """Clamp a value between min_value and max_value."""
         if type(value) is str and (len(value) == 0 or not value.isnumeric()):
             return value
         if self.min_value is not None and float(value) < self.min_value:
