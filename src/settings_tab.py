@@ -12,7 +12,6 @@ class SettingsTab(Tab):
     def create_settings_widgets(self):
         self.settings_frame = ctk.CTkScrollableFrame(self.tab)
         self.settings_frame.pack(fill="both", expand=True)
-        # Make the grid fill the entire frame.
         self.settings_frame.grid_columnconfigure(0, weight=1)
         self.settings_frame.grid_columnconfigure(1, weight=1)
         self.exit_button = ctk.CTkButton(self.tab, text="Exit", command=self.app.destroy)
@@ -84,7 +83,6 @@ class SettingsTab(Tab):
         value = entry.get()
         if len(value) == 0:
             return
-        # Set the value in the settings file.
         self.settings.set(setting.name, value)
         entry.delete("0", ctk.END)
         entry.insert(ctk.END, self.settings.get(setting.name).value)

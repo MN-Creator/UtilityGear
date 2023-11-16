@@ -4,7 +4,6 @@ from entry import Entry
 
 class ConverterTab(Tab):
     def create_content(self):
-        # Create two textboxes for conversion.
         self.create_converter_dict()
         self.conversions = []
         farenheit_celsius_conv = Conversion("F", "C", self.convert_farenheit_to_celcius)
@@ -17,14 +16,9 @@ class ConverterTab(Tab):
         self.conversions.append(inches_cm_conv)
         self.input_box = ctk.CTkEntry(self.tab)
         self.input_box.pack(fill="x", pady=8)
-        # self.unit_button = ctk.CTkSegmentedButton(self.tab, values=list(self.converter_dict.keys()))
-        # self.unit_button.pack(fill="x", pady=8)
-        # self.unit_button.set(list(self.converter_dict.keys())[0])
         self.output_box = Entry(self.tab)
         self.output_box.pack(fill="x", pady=8)
-        # Add a function for when text is changed.
         self.input_box.bind("<KeyRelease>", lambda event: self.input_changed())
-        # Create a segmented button for selecting conversion type.
     
     def create_converter_dict(self):
         self.converter_dict = {

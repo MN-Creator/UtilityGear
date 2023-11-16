@@ -25,8 +25,6 @@ class SettingsManager:
             self.settings[key] = Setting.from_dict(value)
     
     def save_settings(self):
-        # for setting in self.settings.values():
-        #     setting.value = setting.clamp(setting.value)
         save_json = dict()
         for key, value in self.settings.items():
             save_json[key] = value.to_dict()
