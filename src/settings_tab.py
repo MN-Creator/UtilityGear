@@ -76,8 +76,6 @@ class SettingsTab(Tab):
 
     def _create_dropdown_widget(self, setting, grid_row):
         on_dropdown_changed = lambda value, setting=setting: self.settings.set_value(setting.name, setting.value_type(value))
-        # Convert each option to a string.
-        # options_str_list = [str(option) for option in setting.options]
         dropdown = ctk.CTkOptionMenu(self.settings_frame, values=setting.options, command=on_dropdown_changed)
         dropdown.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         dropdown.set_value(str(setting.value))
@@ -93,6 +91,7 @@ class SettingsTab(Tab):
         slider = ctk.CTkSlider(self.settings_frame, from_=setting.min_value, to=setting.max_value, 
                         command=on_slider_changed)
         slider.grid(row=grid_row, column=1, pady=self._pady)
+        slider.set(setting.value)
 
     def _create_entry_widget(self, setting, grid_row):
         entry_setting_value = ctk.CTkEntry(self.settings_frame)
