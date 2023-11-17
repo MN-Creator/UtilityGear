@@ -1,7 +1,4 @@
 import customtkinter as ctk
-from entry import Entry
-import keyboard
-from textbox import Textbox
 
 class Tab():
     def __init__(self, app, tabview, title, visibility_setting=True):
@@ -16,4 +13,4 @@ class Tab():
     
     def _create_visibility_setting(self):
         tab_setting_name = self.title + "_Tab_visible"
-        return self.app.settings.create(tab_setting_name, True)
+        return self.app.settings.create(tab_setting_name, True, parent="tabs")

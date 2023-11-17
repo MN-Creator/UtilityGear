@@ -30,43 +30,46 @@ class SettingsManager:
             json.dump(save_json, file, indent=4)
     
     def clear_settings(self):
-        """Remove all settings"""
+        """Remove all settings."""
         self.settings = {}
         self._save_settings()
 
-    def create(self, name, default_value, hidden=False):
+    def create(self, name, default_value, hidden=False, parent=""):
         """Create a setting with a default value."""
         try:
             self.settings[name].default_value = default_value
             self.settings[name].hidden = hidden
+            self.settings[name].parent = parent
         except KeyError:
-            self.settings[name] = Setting(name, default_value, default_value, hidden)
+            self.settings[name] = Setting(name, default_value, default_value, hidden, parent)
             self._save_settings()
         return self.settings[name]
 
-    def create_range(self, name, default_value, min_value, max_value, hidden=False):
+    def create_range(self, name, default_value, min_value, max_value, hidden=False, parent=""):
         """Create a setting that can have a value between min_value and max_value."""
         try:
             self.settings[name].default_value = default_value
-            self.settings[name].hidden = hidden
             self.settings[name].min_value = min_value
             self.settings[name].max_value = max_value
+            self.settings[name].hidden = hidden
+            self.settings[name].parent = parent
         except KeyError:
             self.settings[name] = Setting(name, default_value, default_value, 
-                                          hidden, min_value=min_value, max_value=max_value)
+                                          hidden, parent, min_value=min_value, max_value=max_value)
             self._save_settings()
         return self.settings[name]
 
-    def create_option(self, name, default_value, options, hidden=False):
+    def create_option(self, name, default_value, options, hidden=False, parent=""):
         """Create a setting that can have a value from a list of options."""
         try:
             self.settings[name].default_value = default_value
-            self.settings[name].hidden = hidden
             self.settings[name].options = Setting.to_str_list(options)
+            self.settings[name].hidden = hidden
+            self.settings[name].parent = parent
         except KeyError:
             options_str_list = Setting.to_str_list(options)
             self.settings[name] = Setting(name, default_value, default_value, 
-                                          hidden, options=options_str_list)
+                                          hidden, parent, options=options_str_list)
             self._save_settings()
         return self.settings[name]
 
@@ -87,7 +90,7 @@ class SettingsManager:
         """Returns the value of a setting as an int."""
         return int(self.get(name).value)
 
-    def set(self, name, value):
+    def set_value(self, name, value):
         """Set the value of a setting by name, creates a new setting if not found."""
         try:
             self.settings[name].set_value(value)
@@ -97,13 +100,14 @@ class SettingsManager:
             self._save_settings()
 
 class Setting:
-    def __init__(self, name, value, default_value=None, hidden=False,
+    def __init__(self, name, value, default_value=None, hidden=False, parent="",
                  on_change=None, options=None, min_value=None, max_value=None):
         self.name = name
         self.value = value
         self.value_type = type(value)
         self.default_value = default_value
         self.hidden = hidden
+        self.parent = parent
         self.on_change = on_change
         self.options = options
         self.min_value = min_value
@@ -119,6 +123,8 @@ class Setting:
             setting.value_type = Setting._determine_value_type(dict)
         if "hidden" in dict:
             setting.hidden = dict["hidden"]
+        if "parent" in dict:
+            setting.parent = dict["parent"]
         if "options" in dict:
             setting.options = dict["options"]
         return setting
@@ -165,6 +171,7 @@ class Setting:
             "value": self.value,
             "default_value": self.default_value,
             "hidden": self.hidden,
+            "parent": self.parent,
             "options": self.options,
             "type": str(self.value_type),
         }
