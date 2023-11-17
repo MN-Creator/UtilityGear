@@ -27,6 +27,7 @@ class TextManipulatorTab(Tab):
         self.manipulators[unique_lines.name] = unique_lines
         regex = TextManipulator("Regex", self._regex)
         self.manipulators[regex.name] = regex
+        self.regex_inputbox = None
         
     def refine_text(self, text):
         text = text.strip()
