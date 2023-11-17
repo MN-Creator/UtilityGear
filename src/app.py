@@ -24,6 +24,7 @@ class App(ctk.CTk):
         self.wm_attributes("-topmost", self.settings.get("always_on_top").value)
         self.overrideredirect(not self.settings.get("show_titlebar").value)
         self._set_transparency()
+        self._set_window_theme()
         self.rescale_window()
 
     def create_settings(self):
@@ -34,6 +35,9 @@ class App(ctk.CTk):
         self.settings.create("show_titlebar", default_value=True)
         self.transparency_setting = self.settings.create_range("transparency", 95, 50, 100)
         self.transparency_setting.on_change = self._set_transparency
+        theme_options = ["system", "light", "dark"]
+        self._window_theme_setting = self.settings.create_option("window_theme", "system", options=theme_options)
+        self._window_theme_setting.on_change = self._set_window_theme
 
     def create_window_size_settings(self):
         window_width_setting = self.settings.create_range("window_width", 400, 300, 700, hidden=True)
@@ -46,6 +50,9 @@ class App(ctk.CTk):
 
     def _set_transparency(self):
         self.attributes("-alpha", self.transparency_setting.value / 100)
+
+    def _set_window_theme(self):
+        ctk.set_appearance_mode(self._window_theme_setting.value)
 
     def rescale_window(self):
         self.window_width = self.settings.get_int("window_width")
