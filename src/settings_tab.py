@@ -90,7 +90,7 @@ class SettingsTab(Tab):
         on_slider_changed = lambda value, setting=setting: self.settings.set_value(setting.name, value)
         slider = ctk.CTkSlider(self.settings_frame, from_=setting.min_value, to=setting.max_value, 
                         command=on_slider_changed)
-        slider.grid(row=grid_row, column=1, pady=self._pady)
+        slider.grid(row=grid_row, column=1, pady=self._pady, sticky=ctk.E)
         slider.set(setting.value)
 
     def _create_entry_widget(self, setting, grid_row):

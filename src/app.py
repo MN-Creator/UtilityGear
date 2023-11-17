@@ -23,21 +23,29 @@ class App(ctk.CTk):
     def setup_window(self):
         self.wm_attributes("-topmost", self.settings.get("always_on_top").value)
         self.overrideredirect(not self.settings.get("show_titlebar").value)
-        self.attributes("-alpha", 0.95)
+        self._set_transparency()
         self.rescale_window()
 
     def create_settings(self):
         self.settings = SettingsManager()
+        self.create_window_size_settings()
+        aot_setting = self.settings.create("always_on_top", default_value=True)
+        aot_setting.on_change = self.set_always_on_top
+        self.settings.create("show_titlebar", default_value=True)
+        self.transparency_setting = self.settings.create_range("transparency", 95, 50, 100)
+        self.transparency_setting.on_change = self._set_transparency
+
+    def create_window_size_settings(self):
         window_width_setting = self.settings.create_range("window_width", 400, 300, 700, hidden=True)
         window_height_setting = self.settings.create_range("window_height", 400, 300, 700, hidden=True)
         window_width_setting.on_change = self.rescale_window
         window_height_setting.on_change = self.rescale_window
-        aot_setting = self.settings.create("always_on_top", default_value=True)
-        aot_setting.on_change = self.set_always_on_top
-        self.settings.create("show_titlebar", default_value=True)
 
     def set_always_on_top(self):
         self.wm_attributes("-topmost", self.settings.get("always_on_top").value)
+
+    def _set_transparency(self):
+        self.attributes("-alpha", self.transparency_setting.value / 100)
 
     def rescale_window(self):
         self.window_width = self.settings.get_int("window_width")
