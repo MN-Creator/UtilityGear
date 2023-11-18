@@ -79,9 +79,9 @@ class App(ctk.CTk):
     def create_widgets(self):
         self.tabview = ctk.CTkTabview(self)
         self.tabview.pack(fill="both", expand=True)
-        TextManipulatorTab(self, self.tabview, "Text")
         NoteTab(self, self.tabview, "Notepad")
         ConverterTab(self, self.tabview, "Converter")
+        TextManipulatorTab(self, self.tabview, "Text")
         SettingsTab(self, self.tabview, "Settings")
 
     def on_window_open(self):
