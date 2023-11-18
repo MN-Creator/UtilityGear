@@ -13,7 +13,7 @@ class SettingsTab(Tab):
     def _create_settings_widgets(self):
         self.settings_frame = ctk.CTkScrollableFrame(self.tab)
         self.settings_frame.pack(fill="both", expand=True)
-        self.settings_frame.grid_columnconfigure(0, weight=1)
+        self.settings_frame.grid_columnconfigure(0, weight=0)
         self.settings_frame.grid_columnconfigure(1, weight=1)
         self.exit_button = ctk.CTkButton(self.tab, text="Exit", command=self.app.destroy)
         self.exit_button.pack(fill="x", pady=8)
@@ -90,7 +90,7 @@ class SettingsTab(Tab):
         on_slider_changed = lambda value, setting=setting: self.settings.set_value(setting.name, value)
         slider = ctk.CTkSlider(self.settings_frame, from_=setting.min_value, to=setting.max_value, 
                         command=on_slider_changed)
-        slider.grid(row=grid_row, column=1, pady=self._pady, sticky=ctk.E)
+        slider.grid(row=grid_row, column=1, pady=self._pady, sticky=ctk.E, padx=(50, 0))
         slider.set(setting.value)
 
     def _create_entry_widget(self, setting, grid_row):
