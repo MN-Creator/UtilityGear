@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import keyboard
+from tabview import TabView
 from settings_manager import SettingsManager
 from settings_tab import SettingsTab
 from converter_tab import ConverterTab
@@ -77,12 +78,13 @@ class App(ctk.CTk):
         self.minsize(350, 350)
 
     def create_widgets(self):
-        self.tabview = ctk.CTkTabview(self)
+        self.tabview = TabView(self)
         self.tabview.pack(fill="both", expand=True)
         NoteTab(self, self.tabview, "Notepad")
         ConverterTab(self, self.tabview, "Converter")
         TextManipulatorTab(self, self.tabview, "Text")
         SettingsTab(self, self.tabview, "Settings")
+        self.tabview.bind_keys()
 
     def on_window_open(self):
         if self.state() == "withdrawn" or self.state() == "iconic":
