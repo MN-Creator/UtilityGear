@@ -53,24 +53,22 @@ class TextManipulatorTab(Tab):
         return "\n".join(text_list)
 
     def create_widgets(self):
-        self.create_main_frame()
-        self.input_box = Textbox(self.frame)
+        self.configure_main_frame()
+        self.input_box = Textbox(self.tab)
         self.input_box.grid(row=0, column=0, padx=2, sticky=ctk.NSEW)
         self.input_box.bind("<KeyRelease>", self.input_changed)
-        self.output_box = ctk.CTkTextbox(self.frame, state="disabled")
+        self.output_box = ctk.CTkTextbox(self.tab, state="disabled")
         self.output_box.grid(row=0, column=1, padx=2, sticky=ctk.NSEW)
         options = list(self.manipulators.keys())
-        self.option_dropdown = ctk.CTkOptionMenu(self.frame, values=options, command=self.on_option_changed)
-        self.option_dropdown.grid(row=1, column=0, padx=2, sticky="SEW")
+        self.option_dropdown = ctk.CTkOptionMenu(self.tab, values=options, command=self.on_option_changed)
+        self.option_dropdown.grid(row=1, column=0, padx=2, pady=(5, 0), sticky="SEW")
         self.option_dropdown.set(self.current_manipulator.name)
 
-    def create_main_frame(self):
-        self.frame = ctk.CTkFrame(self.tab)
-        self.frame.pack(fill="both", expand=True)
-        self.frame.columnconfigure(0, weight=1)
-        self.frame.columnconfigure(1, weight=1)
-        self.frame.rowconfigure(0, weight=1, minsize=250)
-        self.frame.rowconfigure(1, weight=1)
+    def configure_main_frame(self):
+        self.tab.columnconfigure(0, weight=1)
+        self.tab.columnconfigure(1, weight=1)
+        self.tab.rowconfigure(0, weight=1, minsize=250)
+        self.tab.rowconfigure(1, weight=0)
 
     def on_option_changed(self, _):
         self.current_manipulator = self.manipulators[self.option_dropdown.get()]
@@ -97,8 +95,8 @@ class TextManipulatorTab(Tab):
         self.output_box.clipboard_append(self.output_box.get("1.0", "end"))
     
     def _create_regex_widget(self):
-        self.regex_inputbox = ctk.CTkEntry(self.frame, placeholder_text="Press enter to apply regex")
-        self.regex_inputbox.grid(row=1, column=1, padx=2, sticky="SEW")
+        self.regex_inputbox = ctk.CTkEntry(self.tab, placeholder_text="Press enter to apply regex")
+        self.regex_inputbox.grid(row=1, column=1, padx=2, pady=(5, 0), sticky="SEW")
         self.regex_inputbox.bind("<Return>", self.input_changed)
 
     def _regex(self, text):
