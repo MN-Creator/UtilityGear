@@ -83,6 +83,8 @@ class App(ctk.CTk):
         self.window_width = self.settings.get_int("window_width")
         self.window_height = self.settings.get_int("window_height")
         self.set_window_size(self.window_width, self.window_height)
+        self.minsize(350, 350)
+        self.maxsize(700, 700)
 
     def toggle_window(self):
         if self.state() == "normal":
@@ -99,7 +101,6 @@ class App(ctk.CTk):
         self.window_x = screen_width - (self.window_width + offset_x)
         self.window_y = offset_y
         self.geometry("{}x{}+{}+{}".format(width, height, self.window_x, self.window_y))
-        self.minsize(350, 350)
 
     def _create_tabs(self):
         self.tabview = TabView(self)
