@@ -7,6 +7,7 @@ from converter_tab import ConverterTab
 from note_tab import NoteTab
 from text_manipulator_tab import TextManipulatorTab
 
+
 class App(ctk.CTk):
     def __init__(self, title):
         super().__init__()
@@ -34,15 +35,23 @@ class App(ctk.CTk):
         aot_setting = self.settings.create("always_on_top", default_value=True)
         aot_setting.on_change = self.set_always_on_top
         self.settings.create("show_titlebar", default_value=True)
-        self.transparency_setting = self.settings.create_range("transparency", 95, 50, 100)
+        self.transparency_setting = self.settings.create_range(
+            "transparency", 95, 50, 100
+        )
         self.transparency_setting.on_change = self._set_transparency
         theme_options = ["system", "light", "dark"]
-        self._window_theme_setting = self.settings.create_option("window_theme", "system", options=theme_options)
+        self._window_theme_setting = self.settings.create_option(
+            "window_theme", "system", options=theme_options
+        )
         self._window_theme_setting.on_change = self._set_window_theme
 
     def create_window_size_settings(self):
-        window_width_setting = self.settings.create_range("window_width", 400, 300, 700, hidden=True)
-        window_height_setting = self.settings.create_range("window_height", 400, 300, 700, hidden=True)
+        window_width_setting = self.settings.create_range(
+            "window_width", 400, 300, 700, hidden=True
+        )
+        window_height_setting = self.settings.create_range(
+            "window_height", 400, 300, 700, hidden=True
+        )
         window_width_setting.on_change = self.rescale_window
         window_height_setting.on_change = self.rescale_window
 

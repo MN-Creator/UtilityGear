@@ -1,6 +1,7 @@
 import customtkinter as ctk
 
-class Tab():
+
+class Tab:
     def __init__(self, app, tabview, title, visibility_setting=True):
         self.title = title
         self.app = app
@@ -10,7 +11,7 @@ class Tab():
                 return
         self.tab = tabview.add(title)
         self.create_content()
-    
+
     def _create_visibility_setting(self):
         tab_setting_name = self.title + "_Tab_visible"
         return self.app.settings.create(tab_setting_name, True, parent="tabs")

@@ -1,34 +1,35 @@
 import os
 import json
 
+
 class SettingsManager:
     def __init__(self):
         self.settings_file = "app_settings.json"
         self.settings = dict()
         self._create_settings_file()
         self._load_settings()
-    
+
     def _create_settings_file(self):
         # Create a settings file if it doesn't exist.
-        if(not os.path.exists(self.settings_file)):
+        if not os.path.exists(self.settings_file):
             with open(self.settings_file, "w") as file:
                 file.write("")
-    
+
     def _load_settings(self):
-        if(os.stat(self.settings_file).st_size == 0):
+        if os.stat(self.settings_file).st_size == 0:
             return
         with open(self.settings_file, "r") as file:
             output = json.load(file)
         for key, value in output.items():
             self.settings[key] = Setting.from_dict(value)
-    
+
     def _save_settings(self):
         save_json = dict()
         for key, value in self.settings.items():
             save_json[key] = value.to_dict()
         with open(self.settings_file, "w") as file:
             json.dump(save_json, file, indent=4)
-    
+
     def clear_settings(self):
         """Remove all settings."""
         self.settings = {}
@@ -41,11 +42,15 @@ class SettingsManager:
             self.settings[name].hidden = hidden
             self.settings[name].parent = parent
         except KeyError:
-            self.settings[name] = Setting(name, default_value, default_value, hidden, parent)
+            self.settings[name] = Setting(
+                name, default_value, default_value, hidden, parent
+            )
             self._save_settings()
         return self.settings[name]
 
-    def create_range(self, name, default_value, min_value, max_value, hidden=False, parent=""):
+    def create_range(
+        self, name, default_value, min_value, max_value, hidden=False, parent=""
+    ):
         """Create a setting that can have a value between min_value and max_value."""
         try:
             self.settings[name].default_value = default_value
@@ -54,8 +59,15 @@ class SettingsManager:
             self.settings[name].hidden = hidden
             self.settings[name].parent = parent
         except KeyError:
-            self.settings[name] = Setting(name, default_value, default_value, 
-                                          hidden, parent, min_value=min_value, max_value=max_value)
+            self.settings[name] = Setting(
+                name,
+                default_value,
+                default_value,
+                hidden,
+                parent,
+                min_value=min_value,
+                max_value=max_value,
+            )
             self._save_settings()
         return self.settings[name]
 
@@ -68,8 +80,14 @@ class SettingsManager:
             self.settings[name].parent = parent
         except KeyError:
             options_str_list = Setting.to_str_list(options)
-            self.settings[name] = Setting(name, default_value, default_value, 
-                                          hidden, parent, options=options_str_list)
+            self.settings[name] = Setting(
+                name,
+                default_value,
+                default_value,
+                hidden,
+                parent,
+                options=options_str_list,
+            )
             self._save_settings()
         return self.settings[name]
 
@@ -99,9 +117,20 @@ class SettingsManager:
             self.settings[name] = Setting(name, value)
             self._save_settings()
 
+
 class Setting:
-    def __init__(self, name, value, default_value=None, hidden=False, parent="",
-                 on_change=None, options=None, min_value=None, max_value=None):
+    def __init__(
+        self,
+        name,
+        value,
+        default_value=None,
+        hidden=False,
+        parent="",
+        on_change=None,
+        options=None,
+        min_value=None,
+        max_value=None,
+    ):
         self.name = name
         self.value = value
         self.value_type = type(value)
@@ -112,10 +141,10 @@ class Setting:
         self.options = options
         self.min_value = min_value
         self.max_value = max_value
-    
+
     @staticmethod
     def from_dict(dict):
-        """"Create a setting from a dictionary."""
+        """ "Create a setting from a dictionary."""
         setting = Setting(dict["name"], dict["value"])
         if "default_value" in dict:
             setting.default_value = dict["default_value"]
@@ -128,7 +157,7 @@ class Setting:
         if "options" in dict:
             setting.options = dict["options"]
         return setting
-    
+
     @staticmethod
     def _determine_value_type(dict):
         if "int" in dict["type"]:
@@ -146,7 +175,7 @@ class Setting:
 
     def reset_default_value(self):
         self.value = self.default_value
-    
+
     def set_value(self, value):
         value = self._clamp(value)
         if self.value_type is not None:
@@ -154,7 +183,7 @@ class Setting:
         self.value = value
         if self.on_change is not None:
             self.on_change()
-    
+
     def _clamp(self, value):
         """Clamp a value between min_value and max_value."""
         if type(value) is str and (len(value) == 0 or not value.isnumeric()):

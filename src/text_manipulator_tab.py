@@ -3,12 +3,13 @@ from tab import Tab
 from textbox import Textbox
 import re
 
+
 class TextManipulatorTab(Tab):
     def create_content(self):
         self.create_manipulators()
         self.current_manipulator = self.manipulators["Title"]
         self.create_widgets()
-    
+
     def create_manipulators(self):
         self.manipulators = {}
         title = TextManipulator("Title", lambda text: text.title())
@@ -28,7 +29,7 @@ class TextManipulatorTab(Tab):
         regex = TextManipulator("Regex", self._regex)
         self.manipulators[regex.name] = regex
         self.regex_inputbox = None
-        
+
     def refine_text(self, text):
         text = text.strip()
         text = " ".join(text.split())
@@ -60,7 +61,9 @@ class TextManipulatorTab(Tab):
         self.output_box = ctk.CTkTextbox(self.tab, state="disabled")
         self.output_box.grid(row=0, column=1, padx=2, sticky=ctk.NSEW)
         options = list(self.manipulators.keys())
-        self.option_dropdown = ctk.CTkOptionMenu(self.tab, values=options, command=self.on_option_changed)
+        self.option_dropdown = ctk.CTkOptionMenu(
+            self.tab, values=options, command=self.on_option_changed
+        )
         self.option_dropdown.grid(row=1, column=0, padx=2, pady=(5, 0), sticky="SEW")
         self.option_dropdown.set(self.current_manipulator.name)
 
@@ -93,9 +96,11 @@ class TextManipulatorTab(Tab):
     def copy_output(self):
         self.output_box.clipboard_clear()
         self.output_box.clipboard_append(self.output_box.get("1.0", "end"))
-    
+
     def _create_regex_widget(self):
-        self.regex_inputbox = ctk.CTkEntry(self.tab, placeholder_text="Press enter to apply regex")
+        self.regex_inputbox = ctk.CTkEntry(
+            self.tab, placeholder_text="Press enter to apply regex"
+        )
         self.regex_inputbox.grid(row=1, column=1, padx=2, pady=(5, 0), sticky="SEW")
         self.regex_inputbox.bind("<Return>", self.input_changed)
 
@@ -119,10 +124,11 @@ class TextManipulatorTab(Tab):
         except re.error:
             return None
 
+
 class TextManipulator:
     def __init__(self, name, function):
         self.name = name
         self.function = function
-    
+
     def change_text(self, text):
         return self.function(text)

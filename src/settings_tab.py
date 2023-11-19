@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tab import Tab
 
+
 class SettingsTab(Tab):
     def __init__(self, app, tabview, title):
         super().__init__(app, tabview, title, visibility_setting=False)
@@ -15,7 +16,9 @@ class SettingsTab(Tab):
         self.settings_frame.pack(fill="both", expand=True)
         self.settings_frame.grid_columnconfigure(0, weight=0)
         self.settings_frame.grid_columnconfigure(1, weight=1)
-        self.exit_button = ctk.CTkButton(self.tab, text="Exit", command=self.app.destroy)
+        self.exit_button = ctk.CTkButton(
+            self.tab, text="Exit", command=self.app.destroy
+        )
         self.exit_button.pack(fill="x", pady=8)
         self._draw_settings(self._get_parents())
 
@@ -47,7 +50,7 @@ class SettingsTab(Tab):
             if setting.parent is not None and setting.parent not in parents:
                 parents.append(setting.parent)
         return parents
-    
+
     def _draw_setting(self, setting, grid_row):
         if setting.hidden:
             return
@@ -75,21 +78,35 @@ class SettingsTab(Tab):
         self._create_dropdown_widget(setting, grid_row)
 
     def _create_dropdown_widget(self, setting, grid_row):
-        on_dropdown_changed = lambda value, setting=setting: self.settings.set_value(setting.name, setting.value_type(value))
-        dropdown = ctk.CTkOptionMenu(self.settings_frame, values=setting.options, command=on_dropdown_changed)
+        on_dropdown_changed = lambda value, setting=setting: self.settings.set_value(
+            setting.name, setting.value_type(value)
+        )
+        dropdown = ctk.CTkOptionMenu(
+            self.settings_frame, values=setting.options, command=on_dropdown_changed
+        )
         dropdown.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         dropdown.set_value(str(setting.value))
 
     def _create_segmented_widget(self, setting, grid_row):
-        on_segmented_changed = lambda value, setting=setting: self.settings.set_value(setting.name, setting.value_type(value))
-        segmented = ctk.CTkSegmentedButton(self.settings_frame, values=setting.options, command=on_segmented_changed)
+        on_segmented_changed = lambda value, setting=setting: self.settings.set_value(
+            setting.name, setting.value_type(value)
+        )
+        segmented = ctk.CTkSegmentedButton(
+            self.settings_frame, values=setting.options, command=on_segmented_changed
+        )
         segmented.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         segmented.set(str(setting.value))
 
     def _create_slider_widget(self, setting, grid_row):
-        on_slider_changed = lambda value, setting=setting: self.settings.set_value(setting.name, value)
-        slider = ctk.CTkSlider(self.settings_frame, from_=setting.min_value, to=setting.max_value, 
-                        command=on_slider_changed)
+        on_slider_changed = lambda value, setting=setting: self.settings.set_value(
+            setting.name, value
+        )
+        slider = ctk.CTkSlider(
+            self.settings_frame,
+            from_=setting.min_value,
+            to=setting.max_value,
+            command=on_slider_changed,
+        )
         slider.grid(row=grid_row, column=1, pady=self._pady, sticky=ctk.E, padx=(50, 0))
         slider.set(setting.value)
 
@@ -98,10 +115,15 @@ class SettingsTab(Tab):
         entry_setting_value.grid(row=grid_row, column=1, padx=5, pady=self._pady)
         if type(entry_setting_value) is ctk.CTkEntry:
             entry_setting_value.insert(ctk.END, setting.value)
-            entry_setting_value.bind("<KeyRelease>", lambda event, setting=setting: self._entry_changed(event, setting))
+            entry_setting_value.bind(
+                "<KeyRelease>",
+                lambda event, setting=setting: self._entry_changed(event, setting),
+            )
 
     def _create_checkbox_widget(self, setting, grid_row):
-        on_checkbox_changed = lambda: self.settings.set_value(setting.name, checkbox.get())
+        on_checkbox_changed = lambda: self.settings.set_value(
+            setting.name, checkbox.get()
+        )
         checkbox = ctk.CTkCheckBox(self.settings_frame, text="")
         checkbox.configure(command=on_checkbox_changed)
         if setting.value:

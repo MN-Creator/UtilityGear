@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+
 class Entry(ctk.CTkEntry):
     def set_text(self, text):
         self.delete(0, ctk.END)
