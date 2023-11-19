@@ -32,7 +32,7 @@ class TabView(ctk.CTkTabview):
         self._current_tab = self.get()
         self._current_tab_index = self.index(self._current_tab)
 
-    def _change_tab(self, index):
+    def _change_tab(self, index: int):
         """Change to tab at index."""
         self.set(self._tabs[index])
         self._current_tab = self.get()

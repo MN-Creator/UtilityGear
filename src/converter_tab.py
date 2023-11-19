@@ -5,60 +5,60 @@ from entry import Entry
 
 class ConverterTab(Tab):
     def create_content(self):
-        self.create_converter_dict()
-        self.create_widgets()
-        self.input_box.bind("<KeyRelease>", lambda event: self.input_changed())
+        self._create_converter_dict()
+        self._create_widgets()
+        self._input_box.bind("<KeyRelease>", lambda event: self._input_changed())
 
-    def create_widgets(self):
-        self.input_box = ctk.CTkEntry(self.tab, placeholder_text="5 cm")
-        self.input_box.pack(fill="x", pady=8)
-        self.output_box = Entry(self.tab, state="readonly")
-        self.output_box.pack(fill="x", pady=8)
+    def _create_widgets(self):
+        self._input_box = ctk.CTkEntry(self.tab, placeholder_text="5 cm")
+        self._input_box.pack(fill="x", pady=8)
+        self._output_box = Entry(self.tab, state="readonly")
+        self._output_box.pack(fill="x", pady=8)
 
-    def create_converter_dict(self):
-        self.converter_dict = {
-            "c": self.convert_celcius_to_farenheit,
-            "f": self.convert_farenheit_to_celcius,
-            "cm": self.convert_cm_to_inches,
-            "inch": self.convert_inches_to_cm,
-            "inches": self.convert_inches_to_cm,
+    def _create_converter_dict(self):
+        self._converter_dict = {
+            "c": self._convert_celcius_to_farenheit,
+            "f": self._convert_farenheit_to_celcius,
+            "cm": self._convert_cm_to_inches,
+            "inch": self._convert_inches_to_cm,
+            "inches": self._convert_inches_to_cm,
         }
 
-    def input_changed(self):
-        text = self.input_box.get()
+    def _input_changed(self):
+        text = self._input_box.get()
         text_split = text.split(" ")
         if len(text) < 3 or len(text_split) < 2:
-            self.output_box.set_text_in_readonly("")
+            self._output_box.set_text_in_readonly("")
             return
         value = text_split[0]
         unit = text_split[1]
         if value.isnumeric():
             unit = unit.lower()
             try:
-                self.converter_dict[unit](float(value))
+                self._converter_dict[unit](float(value))
             except KeyError:
                 return
 
-    def convert_farenheit_to_celcius(self, farenheit):
+    def _convert_farenheit_to_celcius(self, farenheit: float):
         celsius = (farenheit - 32) * (5 / 9)
         celsius = "{:.2f}".format(celsius)
-        self.set_output_text(celsius, "C")
+        self._set_output_text(celsius, "C")
 
-    def convert_celcius_to_farenheit(self, celcius):
+    def _convert_celcius_to_farenheit(self, celcius: float):
         farenheit = (celcius * (9 / 5)) + 32
         farenheit = "{:.2f}".format(farenheit)
-        self.set_output_text(farenheit, "F")
+        self._set_output_text(farenheit, "F")
 
-    def convert_cm_to_inches(self, cm):
+    def _convert_cm_to_inches(self, cm: float):
         output = cm / 2.54
         output = "{:.2f}".format(output)
-        self.set_output_text(output, "inch")
+        self._set_output_text(output, "inch")
 
-    def convert_inches_to_cm(self, inches):
+    def _convert_inches_to_cm(self, inches: float):
         value = inches * 2.54
         value = "{:.2f}".format(value)
-        self.set_output_text(value, "cm")
+        self._set_output_text(value, "cm")
 
-    def set_output_text(self, value, unit):
+    def _set_output_text(self, value: float, unit: str):
         text = str(value) + " " + unit
-        self.output_box.set_text_in_readonly(text)
+        self._output_box.set_text_in_readonly(text)

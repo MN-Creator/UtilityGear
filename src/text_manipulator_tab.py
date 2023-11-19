@@ -30,24 +30,24 @@ class TextManipulatorTab(Tab):
         self.manipulators[regex.name] = regex
         self.regex_inputbox = None
 
-    def refine_text(self, text):
+    def refine_text(self, text: str) -> str:
         text = text.strip()
         text = " ".join(text.split())
         return text
 
-    def sort_text_asc(self, text):
+    def sort_text_asc(self, text: str) -> str:
         text_list = text.split("\n")
         text_list = [line for line in text_list if len(line) > 0]
         text_list = sorted(text_list)
         return "\n".join(text_list)
 
-    def sort_text_desc(self, text):
+    def sort_text_desc(self, text: str) -> str:
         text_list = text.split("\n")
         text_list = [line for line in text_list if len(line) > 0]
         text_list = sorted(text_list, reverse=True)
         return "\n".join(text_list)
 
-    def unique_lines(self, text):
+    def unique_lines(self, text: str) -> str:
         text_list = text.split("\n")
         text_list = [line for line in text_list if len(line) > 0]
         text_list = list(set(text_list))
@@ -104,7 +104,7 @@ class TextManipulatorTab(Tab):
         self.regex_inputbox.grid(row=1, column=1, padx=2, pady=(5, 0), sticky="SEW")
         self.regex_inputbox.bind("<Return>", self.input_changed)
 
-    def _regex(self, text):
+    def _regex(self, text: str) -> str:
         regex_text = self.regex_inputbox.get()
         regex_text = regex_text.strip()
         if len(text) == 0 or len(regex_text) == 0:
@@ -117,7 +117,7 @@ class TextManipulatorTab(Tab):
             return ""
         return matches
 
-    def _compile_regex(self, regex_text):
+    def _compile_regex(self, regex_text: str):
         try:
             regex = re.compile(regex_text)
             return regex
@@ -130,5 +130,5 @@ class TextManipulator:
         self.name = name
         self.function = function
 
-    def change_text(self, text):
+    def change_text(self, text: str) -> str:
         return self.function(text)
