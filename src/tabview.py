@@ -24,8 +24,6 @@ class TabView(ctk.CTkTabview):
                 f"<{modifier_key}-Key-{i + 1}>",
                 lambda event, index=i: self._change_tab(index),
             )
-        self.master.bind("<Left>", lambda event: self._previous_tab())
-        self.master.bind("<Right>", lambda event: self._next_tab())
 
     def _on_tab_changed(self):
         """Called when the tab is changed by the segmented button."""
@@ -37,13 +35,3 @@ class TabView(ctk.CTkTabview):
         self.set(self._tabs[index])
         self._current_tab = self.get()
         self._current_tab_index = self.index(self._current_tab)
-
-    def _previous_tab(self):
-        if self._current_tab_index > 0:
-            self._current_tab_index -= 1
-            self.set(self._tabs[self._current_tab_index])
-
-    def _next_tab(self):
-        if self._current_tab_index < (len(self._tabs) - 1):
-            self._current_tab_index += 1
-            self.set(self._tabs[self._current_tab_index])
