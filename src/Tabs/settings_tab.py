@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tab import Tab
+from .tab import Tab
 from settings_manager import Setting
 from tabview import TabView
 

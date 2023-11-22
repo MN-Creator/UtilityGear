@@ -1,14 +1,17 @@
 import customtkinter as ctk
 import keyboard
-from tabview import TabView
+
 from settings_manager import SettingsManager
-from settings_tab import SettingsTab
-from converter_tab import ConverterTab
-from note_tab import NoteTab
-from text_manipulator_tab import TextManipulatorTab
+from tabview import TabView
+from Tabs import NoteTab
+from Tabs import ConverterTab
+from Tabs import TextManipulatorTab
+from Tabs import SettingsTab
 
 
 class App(ctk.CTk):
+    """Root application window."""
+
     def __init__(self, title: str):
         super().__init__()
         self._title = title
