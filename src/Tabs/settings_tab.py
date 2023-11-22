@@ -87,7 +87,7 @@ class SettingsTab(Tab):
             self.settings_frame, values=setting.options, command=on_dropdown_changed
         )
         dropdown.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
-        dropdown.set_value(str(setting.value))
+        dropdown.set(str(setting.value))
 
     def _create_segmented_widget(self, setting: Setting, grid_row: int):
         on_segmented_changed = lambda value, setting=setting: self.settings.set_value(
