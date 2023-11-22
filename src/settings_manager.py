@@ -1,34 +1,25 @@
-import os
-import json
+from storage import Storage
 
 
 class SettingsManager:
-    def __init__(self):
-        self.settings_file = "app_settings.json"
+    def __init__(self, storage: Storage):
+        self._storage = storage
         self.settings = dict()
-        self._create_settings_file()
         self._load_settings()
 
-    def _create_settings_file(self):
-        # Create a settings file if it doesn't exist.
-        if not os.path.exists(self.settings_file):
-            with open(self.settings_file, "w") as file:
-                file.write("")
-
     def _load_settings(self):
-        if os.stat(self.settings_file).st_size == 0:
-            return
-        with open(self.settings_file, "r") as file:
-            output = json.load(file)
-        for key, value in output.items():
-            self.settings[key] = Setting.from_dict(value)
+        """Load settings from storage"""
+        settings_dict = self._storage.read_object("settings")
+        if settings_dict is not None:
+            for key, value in settings_dict.items():
+                self.settings[key] = Setting.from_dict(value)
 
     def _save_settings(self):
-        save_json = dict()
+        """Save settings to storage"""
+        settings_dict = dict()
         for key, value in self.settings.items():
-            save_json[key] = value.to_dict()
-        with open(self.settings_file, "w") as file:
-            json.dump(save_json, file, indent=4)
+            settings_dict[key] = value.to_dict()
+        self._storage.save_object("settings", settings_dict)
 
     def clear_settings(self):
         """Remove all settings."""
@@ -71,7 +62,9 @@ class SettingsManager:
             self._save_settings()
         return self.settings[name]
 
-    def create_option(self, name: str, default_value, options: list, hidden=False, parent="") -> "Setting":
+    def create_option(
+        self, name: str, default_value, options: list, hidden=False, parent=""
+    ) -> "Setting":
         """Create a setting that can have a value from a list of options."""
         try:
             self.settings[name].default_value = default_value

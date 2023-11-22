@@ -2,6 +2,7 @@ import customtkinter as ctk
 import keyboard
 
 from settings_manager import SettingsManager
+from storage import Storage
 from tabview import TabView
 from Tabs import NoteTab
 from Tabs import ConverterTab
@@ -16,6 +17,7 @@ class App(ctk.CTk):
         super().__init__()
         self._title = title
         self.title(title)
+        self.storage = Storage(self._title + "_storage.json")
         self._create_settings()
         self._setup_window()
         self._setup_bindings()
@@ -33,7 +35,7 @@ class App(ctk.CTk):
         self.rescale_window()
 
     def _create_settings(self):
-        self.settings = SettingsManager()
+        self.settings = SettingsManager(self.storage)
         self._create_window_size_settings()
         self._show_titlebar_setting = self.settings.create(
             "show_titlebar", default_value=True
