@@ -32,7 +32,9 @@ class ConverterTab(Tab):
             return
         value = text_split[0]
         unit = text_split[1]
-        if value.isnumeric():
+        only_numbers = value.replace(".", "", 1)
+        only_numbers = only_numbers.replace("-", "", 1)
+        if only_numbers.isnumeric():
             unit = unit.lower()
             try:
                 self._converter_dict[unit](float(value))
