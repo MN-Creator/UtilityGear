@@ -2,9 +2,9 @@ import customtkinter as ctk
 from .tab import Tab
 from settings_manager import Setting
 from tabview import TabView
+from slider import Slider
 from setting import Setting
 from setting import RangeSetting
-from setting import OptionSetting
 
 
 class SettingsTab(Tab):
@@ -106,7 +106,7 @@ class SettingsTab(Tab):
         on_slider_changed = lambda value, setting=setting: self.settings.set_value(
             setting.name, value
         )
-        slider = ctk.CTkSlider(
+        slider = Slider(
             self.settings_frame,
             from_=setting.min_value,
             to=setting.max_value,
