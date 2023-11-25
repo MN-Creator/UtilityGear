@@ -2,6 +2,9 @@ import customtkinter as ctk
 from .tab import Tab
 from settings_manager import Setting
 from tabview import TabView
+from setting import Setting
+from setting import RangeSetting
+from setting import OptionSetting
 
 
 class SettingsTab(Tab):
@@ -58,13 +61,13 @@ class SettingsTab(Tab):
             return
         clean_name = self._clean_name(setting.name)
         self._create_label(self.settings_frame, clean_name, 0, grid_row, self._pady)
-        if setting.options is not None:
+        if hasattr(setting, "options"):
             self._draw_option_setting(setting, grid_row)
             return
-        if setting.value_type is bool:
+        elif setting.value_type is bool:
             self._create_checkbox_widget(setting, grid_row)
             return
-        elif setting.min_value is not None and setting.max_value is not None:
+        elif hasattr(setting, "min_value") and hasattr(setting, "max_value"):
             self._create_slider_widget(setting, grid_row)
             return
         self._create_entry_widget(setting, grid_row)
@@ -99,7 +102,7 @@ class SettingsTab(Tab):
         segmented.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         segmented.set(str(setting.value))
 
-    def _create_slider_widget(self, setting: Setting, grid_row: int):
+    def _create_slider_widget(self, setting: RangeSetting, grid_row: int):
         on_slider_changed = lambda value, setting=setting: self.settings.set_value(
             setting.name, value
         )
