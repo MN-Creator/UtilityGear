@@ -15,7 +15,7 @@ class NoteTab(Tab):
         self.tab.bind("<Destroy>", lambda _: self._save_on_destroy())
 
     def _create_textbox(self) -> None:
-        """Create the notepad"""
+        """Create the notepad."""
         font = (self._font, self.font_size_setting.value)
         self.text = Textbox(self.tab, font=font)
         self.text.pack(fill=ctk.BOTH, expand=True)
@@ -36,7 +36,7 @@ class NoteTab(Tab):
         self.text.configure(font=(self._font, font_size))
 
     def _create_auto_save_setting(self) -> None:
-        """Create a boolean setting to enable/disable auto save"""
+        """Create a boolean setting to enable/disable auto save."""
         self.auto_save_setting = self.app.settings.create(
             "notepad_autosave", True, parent="Notepad"
         )
@@ -46,17 +46,18 @@ class NoteTab(Tab):
         if self.auto_save_setting.value:
             # Save the note when the user stops typing
             self.text.on_key_released(lambda _: self._auto_save())
+            self._auto_save()
             return
         self.text.unbind("<KeyRelease>", None)
 
     def _auto_save(self) -> None:
-        """Save the note after a short delay"""
+        """Save the note after a short delay."""
         if self._auto_save_after_id is not None:
             self.app.after_cancel(self._auto_save_after_id)
         self._auto_save_after_id = self.app.after(500, self._save_note)
 
     def _save_on_destroy(self) -> None:
-        """Save note when user exits the app"""
+        """Save note when user exits the app."""
         if self.auto_save_setting.value and self._auto_save_after_id is not None:
             self._save_note()
 
