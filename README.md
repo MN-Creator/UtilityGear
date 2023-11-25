@@ -1,11 +1,12 @@
 # UtilityGear
-UtilityGear is a program with useful utilities for everyday use. The program is equipped with text tools, notepad and conversion between metric and imperial units. The program is supposed to be always running in the background and be quickly opened and closed with a keyboard shortcut. All interactions with the program is planned to be used with only a keyboard, but there are limited keyboard shortcuts at the moment. The project is in an early stage and many more features will be added!
+UtilityGear is a program with useful utilities for everyday use. The program is equipped with text tools, notepad and conversion between metric and imperial units. The program is made to always be running in the background and be quickly opened and closed with a keyboard shortcut. All interactions with the program is planned to be used with only a keyboard, but there are limited keyboard shortcuts at the moment. The project is in an early stage and many more features will be added!
 
-The project is built using Python with CustomTkinter for the user interface and Keyboard to listen for keyboard shortcuts when the program is closed. 
+The project is built using Python with <a href="https://customtkinter.tomschimansky.com/">CustomTkinter</a> for the user interface and <a href="https://pypi.org/project/keyboard/">Keyboard</a> to listen for keyboard shortcuts when the program is closed. 
 
 <b>Keyboard shortcuts</b><br>
 ALT + Q - Open/close window<br>
-ALT + Z - Exit program
+ALT + Z - Exit program<br>
+CTRL + (Number) - Switch between tabs with numbers 1-4
 
 # Previews
 ![Screenshot 2023-11-13 211458](https://github.com/MN-Creator/UtilityGear/assets/68109830/c27dd293-8fd6-43f7-aa3a-1866a39b4488)
