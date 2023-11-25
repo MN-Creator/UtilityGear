@@ -2,3 +2,4 @@ customtkinter==5.2.1
 darkdetect==0.8.0
 keyboard==0.13.5
 packaging==23.2
+CTkToolTip==0.8
