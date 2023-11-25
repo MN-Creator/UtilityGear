@@ -25,10 +25,14 @@ class Slider(ctk.CTkSlider):
         self._command = self._on_slider_change
 
     def _create_tooltip(self) -> None:
-        value = int(self.get())
-        self._tooltip = ToolTip(self, message=f"{value}", delay=0.1)
+        value = f"{int(self.get())}"
+        self._tooltip = ToolTip(self, message=value, delay=0.1)
 
     def _on_slider_change(self, event):
         self._tooltip.configure(message=f"{int(self.get())}")
-        if self._user_command is not None:
+        if self._user_command:
             self._user_command(self.get())
+
+    def set(self, value: float) -> None:
+        super().set(value)
+        self._tooltip.configure(message=f"{int(self.get())}")
