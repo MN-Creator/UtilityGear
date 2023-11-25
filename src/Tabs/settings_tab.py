@@ -1,4 +1,6 @@
 import customtkinter as ctk
+
+from tooltip import ToolTip
 from .tab import Tab
 from settings_manager import Setting
 from tabview import TabView
@@ -8,15 +10,15 @@ from setting import RangeSetting
 
 
 class SettingsTab(Tab):
-    def __init__(self, app, tabview: TabView, title: str):
+    def __init__(self, app, tabview: TabView, title: str) -> None:
         super().__init__(app, tabview, title, visibility_setting=False)
 
-    def create_content(self):
+    def create_content(self) -> None:
         self.settings = self.app.settings
         self._pady = 2
         self._create_settings_widgets()
 
-    def _create_settings_widgets(self):
+    def _create_settings_widgets(self) -> None:
         self.settings_frame = ctk.CTkScrollableFrame(self.tab)
         self.settings_frame.pack(fill="both", expand=True)
         self.settings_frame.grid_columnconfigure(0, weight=0)
@@ -27,7 +29,7 @@ class SettingsTab(Tab):
         self.exit_button.pack(fill="x", pady=8)
         self._draw_settings(self._get_parents())
 
-    def _draw_settings(self, parents: list):
+    def _draw_settings(self, parents: list) -> None:
         current_row = 0
         for parent in parents:
             if len(parent) > 0:
@@ -42,7 +44,7 @@ class SettingsTab(Tab):
                 grid_row += 1
         return grid_row
 
-    def _create_parent_label(self, name: str, grid_row: int):
+    def _create_parent_label(self, name: str, grid_row: int) -> None:
         text = self._clean_name(name)
         text = text.upper()
         font = ("TkDefaultFont", 14, "bold")
@@ -56,11 +58,14 @@ class SettingsTab(Tab):
                 parents.append(setting.parent)
         return parents
 
-    def _draw_setting(self, setting: Setting, grid_row: int):
+    def _draw_setting(self, setting: Setting, grid_row: int) -> None:
         if setting.hidden:
             return
         clean_name = self._clean_name(setting.name)
-        self._create_label(self.settings_frame, clean_name, 0, grid_row, self._pady)
+        label = self._create_label(
+            self.settings_frame, clean_name, 0, grid_row, self._pady
+        )
+        self.create_description_tooltip(label, setting.description)
         if hasattr(setting, "options"):
             self._draw_option_setting(setting, grid_row)
             return
@@ -72,17 +77,20 @@ class SettingsTab(Tab):
             return
         self._create_entry_widget(setting, grid_row)
 
-    def _create_label(self, container, text: str, column: int, row: int, pady=0):
+    def _create_label(
+        self, container, text: str, column: int, row: int, pady=0
+    ) -> ctk.CTkLabel:
         label = ctk.CTkLabel(container, text=text)
         label.grid(row=row, column=column, pady=pady, sticky=ctk.W)
+        return label
 
-    def _draw_option_setting(self, setting: Setting, grid_row: int):
+    def _draw_option_setting(self, setting: Setting, grid_row: int) -> None:
         if len(setting.options) <= 5:
             self._create_segmented_widget(setting, grid_row)
             return
         self._create_dropdown_widget(setting, grid_row)
 
-    def _create_dropdown_widget(self, setting: Setting, grid_row: int):
+    def _create_dropdown_widget(self, setting: Setting, grid_row: int) -> None:
         on_dropdown_changed = lambda value, setting=setting: self.settings.set_value(
             setting.name, setting.value_type(value)
         )
@@ -92,7 +100,7 @@ class SettingsTab(Tab):
         dropdown.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         dropdown.set(str(setting.value))
 
-    def _create_segmented_widget(self, setting: Setting, grid_row: int):
+    def _create_segmented_widget(self, setting: Setting, grid_row: int) -> None:
         on_segmented_changed = lambda value, setting=setting: self.settings.set_value(
             setting.name, setting.value_type(value)
         )
@@ -102,7 +110,7 @@ class SettingsTab(Tab):
         segmented.grid(row=grid_row, column=1, padx=5, pady=self._pady, sticky=ctk.E)
         segmented.set(str(setting.value))
 
-    def _create_slider_widget(self, setting: RangeSetting, grid_row: int):
+    def _create_slider_widget(self, setting: RangeSetting, grid_row: int) -> None:
         on_slider_changed = lambda value, setting=setting: self.settings.set_value(
             setting.name, value
         )
@@ -115,7 +123,7 @@ class SettingsTab(Tab):
         slider.grid(row=grid_row, column=1, pady=self._pady, sticky=ctk.E, padx=(50, 0))
         slider.set(setting.value)
 
-    def _create_entry_widget(self, setting: Setting, grid_row: int):
+    def _create_entry_widget(self, setting: Setting, grid_row: int) -> None:
         entry_setting_value = ctk.CTkEntry(self.settings_frame)
         entry_setting_value.grid(row=grid_row, column=1, padx=5, pady=self._pady)
         if type(entry_setting_value) is ctk.CTkEntry:
@@ -125,7 +133,7 @@ class SettingsTab(Tab):
                 lambda event, setting=setting: self._entry_changed(event, setting),
             )
 
-    def _create_checkbox_widget(self, setting: Setting, grid_row: int):
+    def _create_checkbox_widget(self, setting: Setting, grid_row: int) -> None:
         on_checkbox_changed = lambda: self.settings.set_value(
             setting.name, checkbox.get()
         )
@@ -134,11 +142,18 @@ class SettingsTab(Tab):
         if setting.value:
             checkbox.select()
         checkbox.grid(row=grid_row, column=1, sticky=ctk.E)
+        self.create_description_tooltip(checkbox, setting.description)
+
+    @staticmethod
+    def create_description_tooltip(widget, description: str) -> None:
+        if description:
+            ToolTip(widget, description)
 
     def _clean_name(self, name: str) -> str:
+        """Return string without underscores and with title case."""
         return name.replace("_", " ").title()
 
-    def _entry_changed(self, event, setting: Setting):
+    def _entry_changed(self, event, setting: Setting) -> None:
         if event.keysym != "Return":
             return
         entry = event.widget

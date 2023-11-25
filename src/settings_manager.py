@@ -38,21 +38,31 @@ class SettingsManager:
         self.settings = {}
         self._save_settings()
 
-    def create(self, name: str, default_value, hidden=False, parent="") -> Setting:
+    def create(
+        self, name: str, default_value, hidden=False, parent="", desc: str = ""
+    ) -> Setting:
         """Create a setting with a default value."""
         try:
             self.settings[name].default_value = default_value
             self.settings[name].hidden = hidden
             self.settings[name].parent = parent
+            self.settings[name].description = desc
         except KeyError:
             self.settings[name] = Setting(
-                name, default_value, default_value, hidden, parent
+                name, default_value, default_value, hidden, parent, desc
             )
             self._save_settings()
         return self.settings[name]
 
     def create_range(
-        self, name: str, default_value, min_value, max_value, hidden=False, parent=""
+        self,
+        name: str,
+        default_value,
+        min_value,
+        max_value,
+        hidden=False,
+        parent="",
+        desc: str = "",
     ) -> RangeSetting:
         """Create a setting that can have a value between min_value and max_value."""
         try:
@@ -61,6 +71,7 @@ class SettingsManager:
             self.settings[name].max_value = max_value
             self.settings[name].hidden = hidden
             self.settings[name].parent = parent
+            self.settings[name].description = desc
         except KeyError:
             self.settings[name] = RangeSetting(
                 name,
@@ -70,6 +81,7 @@ class SettingsManager:
                 max_value,
                 hidden=hidden,
                 parent=parent,
+                description=desc,
             )
             self._save_settings()
         return self.settings[name]
@@ -81,6 +93,7 @@ class SettingsManager:
         options: list,
         hidden: bool = False,
         parent: str = "",
+        desc: str = "",
     ) -> OptionSetting:
         """Create a setting that can have a value from a list of options."""
         try:
@@ -88,6 +101,7 @@ class SettingsManager:
             self.settings[name].options = options
             self.settings[name].hidden = hidden
             self.settings[name].parent = parent
+            self.settings[name].description = desc
         except KeyError:
             self.settings[name] = OptionSetting(
                 name,
@@ -96,6 +110,7 @@ class SettingsManager:
                 options=options,
                 hidden=hidden,
                 parent=parent,
+                description=desc,
             )
         self._save_settings()
         return self.settings[name]

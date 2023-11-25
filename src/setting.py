@@ -8,6 +8,7 @@ class Setting:
         default_value=None,
         hidden: bool = False,
         parent: str = "",
+        description: str = "",
         value_type: type = None,
         on_change: callable = None,
     ) -> None:
@@ -16,6 +17,7 @@ class Setting:
         self.default_value = default_value
         self.hidden = hidden
         self.parent = parent
+        self.description = description
         self.on_change = on_change
         if value_type is None:
             self.value_type = type(value)
@@ -73,12 +75,20 @@ class OptionSetting(Setting):
         options: list | list[str],
         hidden: bool = False,
         parent: str = "",
+        description: str = "",
         value_type: type = None,
         on_change: callable = None,
     ) -> None:
         self.options = options
         super().__init__(
-            name, value, default_value, hidden, parent, value_type, on_change
+            name=name,
+            value=value,
+            default_value=default_value,
+            hidden=hidden,
+            parent=parent,
+            description=description,
+            value_type=value_type,
+            on_change=on_change,
         )
 
     def _set_value(self, value: any) -> None:
@@ -126,6 +136,7 @@ class RangeSetting(Setting):
         on_change: callable = None,
         hidden: bool = False,
         parent: str = None,
+        description: str = "",
         value_type: type = None,
     ) -> None:
         self.min_value = min_value
@@ -136,6 +147,7 @@ class RangeSetting(Setting):
             default_value=default_value,
             hidden=hidden,
             parent=parent,
+            description=description,
             value_type=value_type,
             on_change=on_change,
         )

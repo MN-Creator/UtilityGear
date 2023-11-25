@@ -15,5 +15,8 @@ class Tab:
         self.create_content()
 
     def _create_visibility_setting(self) -> Setting:
+        DESC = "Show or hide tab."
         tab_setting_name = self.title + "_Tab_visible"
-        return self.app.settings.create(tab_setting_name, True, parent="tabs")
+        return self.app.settings.create(
+            tab_setting_name, True, parent="tabs", desc=DESC
+        )

@@ -25,9 +25,14 @@ class NoteTab(Tab):
         self._create_font_size_setting()
 
     def _create_font_size_setting(self):
+        DESC = "Set the font size of the notepad."
         size_options = [12, 14, 16, 18, 20]
         self.font_size_setting = self.app.settings.create_option(
-            "notepad_font_size", size_options[0], options=size_options, parent="Notepad"
+            "notepad_font_size",
+            size_options[0],
+            options=size_options,
+            parent="Notepad",
+            desc=DESC,
         )
         self.font_size_setting.on_change = self._set_font_size
 
@@ -37,8 +42,9 @@ class NoteTab(Tab):
 
     def _create_auto_save_setting(self) -> None:
         """Create a boolean setting to enable/disable auto save."""
+        DESC = "Automatically save when typing. The notepad will not save if option is disabled."
         self.auto_save_setting = self.app.settings.create(
-            "notepad_autosave", True, parent="Notepad"
+            "notepad_autosave", True, parent="Notepad", desc=DESC
         )
         self.auto_save_setting.on_change = self._set_saving_behaviour
 

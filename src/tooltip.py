@@ -3,7 +3,8 @@ try:
 except ModuleNotFoundError:
 
     class CTkToolTip:
-        pass
+        def __init__(self, *args) -> None:
+            pass
 
 
 class ToolTip(CTkToolTip):
@@ -12,4 +13,5 @@ class ToolTip(CTkToolTip):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Show over all other windows to display even when the root window is topmost.
-        self.attributes("-topmost", True)
+        if hasattr(self, "attributes"):
+            self.attributes("-topmost", True)
