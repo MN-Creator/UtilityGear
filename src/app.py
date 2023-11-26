@@ -16,6 +16,7 @@ class App(ctk.CTk):
     def __init__(self, title: str) -> None:
         super().__init__()
         self._title = title
+        self.restart = False
         self.title(title)
         self.storage = Storage(self._title + "_storage.json")
         self._create_settings()
@@ -131,3 +132,7 @@ class App(ctk.CTk):
     def minimize_window(self) -> None:
         if self.state() == "normal":
             self.withdraw()
+
+    def restart_app(self) -> None:
+        self.restart = True
+        self.destroy()

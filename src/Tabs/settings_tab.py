@@ -23,11 +23,33 @@ class SettingsTab(Tab):
         self.settings_frame.pack(fill="both", expand=True)
         self.settings_frame.grid_columnconfigure(0, weight=0)
         self.settings_frame.grid_columnconfigure(1, weight=1)
-        self.exit_button = ctk.CTkButton(
-            self.tab, text="Exit", command=self.app.destroy
-        )
-        self.exit_button.pack(fill="x", pady=8)
+        self._create_bottom_btn_frame()
         self._draw_settings(self._get_parents())
+
+    def _create_bottom_btn_frame(self):
+        """Create the frame containing the exit and restart buttons."""
+        self.button_frame = ctk.CTkFrame(self.tab)
+        self.button_frame.pack(fill="x")
+        self.button_frame.columnconfigure(0, weight=1)
+        self.button_frame.columnconfigure(1, weight=1)
+        button_font = ("TkDefaultFont", 12, "bold")
+        self.restart_btn = ctk.CTkButton(
+            self.button_frame,
+            text="RESTART",
+            command=self.app.restart_app,
+            fg_color="orange",
+            text_color="white",
+            hover_color="darkorange",
+            font=button_font,
+        ).grid(row=0, column=0, sticky=ctk.EW, padx=5, pady=2)
+        self.exit_button = ctk.CTkButton(
+            self.button_frame,
+            text="EXIT",
+            command=self.app.destroy,
+            fg_color="red",
+            hover_color="darkred",
+            font=button_font,
+        ).grid(row=0, column=1, sticky=ctk.EW, padx=5, pady=2)
 
     def _draw_settings(self, parents: list) -> None:
         current_row = 0
