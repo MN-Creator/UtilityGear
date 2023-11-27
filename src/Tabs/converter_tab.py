@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from .tab import Tab
-from entry import Entry
+from widgets import Entry
 
 
 class ConverterTab(Tab):

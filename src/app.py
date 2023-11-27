@@ -3,11 +3,11 @@ import keyboard
 
 from settings_manager import SettingsManager
 from storage import Storage
-from tabview import TabView
-from Tabs import NoteTab
-from Tabs import ConverterTab
-from Tabs import TextManipulatorTab
-from Tabs import SettingsTab
+from widgets import TabView
+from tabs import NoteTab
+from tabs import ConverterTab
+from tabs import TextManipulatorTab
+from tabs import SettingsTab
 
 
 class App(ctk.CTk):

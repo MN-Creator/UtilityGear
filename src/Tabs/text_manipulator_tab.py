@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from .tab import Tab
-from textbox import Textbox
+from widgets import Textbox
 import re
 
 

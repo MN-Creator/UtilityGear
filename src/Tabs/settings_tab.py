@@ -1,10 +1,10 @@
 import customtkinter as ctk
 
-from tooltip import ToolTip
+from widgets import ToolTip
 from .tab import Tab
 from settings_manager import Setting
-from tabview import TabView
-from slider import Slider
+from widgets import TabView
+from widgets import Slider
 from setting import Setting
 from setting import RangeSetting
 

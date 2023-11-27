@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from settings_manager import Setting
-from tabview import TabView
+from widgets import TabView
 
 
 class Tab:
