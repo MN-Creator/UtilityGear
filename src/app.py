@@ -18,6 +18,7 @@ class App(ctk.CTk):
         self._title = title
         self.restart = False
         self.title(title)
+        self.iconbitmap("assets/icon.ico")
         self.storage = Storage(self._title + "_storage.json")
         self._create_settings()
         self._setup_window()
