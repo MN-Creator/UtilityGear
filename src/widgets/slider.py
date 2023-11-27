@@ -2,7 +2,7 @@ import customtkinter as ctk
 
 try:
     import CTkToolTip
-    from tooltip import ToolTip
+    from .tooltip import ToolTip
 except ModuleNotFoundError:
     ToolTip = None
 
